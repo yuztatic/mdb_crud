@@ -1,7 +1,7 @@
 <?php
-$databasePath = 'E:\\wamp\\www\\mdb\\dbUser.mdb'; // to be used in wamp
+// $databasePath = 'E:\\wamp\\www\\mdb\\dbUser.mdb'; // to be used in wamp
 
-//$databasePath = 'C:\xampp\htdocs\mdb_crud\dbUser.mdb';    // to be used in xampp
+$databasePath = 'C:\xampp\htdocs\mdb_crud\dbUser.mdb';    // to be used in xampp
 
 $password = '5s6rDB*&6'; // Your database password (if applicable)
 

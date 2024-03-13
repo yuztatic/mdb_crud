@@ -12,12 +12,14 @@ $UserDesignation=$_POST['UserDesignation'];
 $UserGroupID=$_POST['UserGroupID'];
 $Password=$_POST['Password'];
 $RefDate=$_POST['RefDate'];
+$RefDate = date('Y/m/d h:i:s A', strtotime($RefDate));
 // $_POST['IsDeleted'],
 // $_POST['DeletedDate'],
-$Remarks=$_POST['Remarks'];  
+$Remarks=$_POST['Remarks']; 
+$LastPasswordUpdate = date('Y/m/d h:i:s A', strtotime($_POST['LastPasswordUpdate']));
 
-$insertQuery = "INSERT INTO tbUser (RegCode,UserCode, UserName, UserDesignation, UserGroupID, Password, RefDate, Remarks)
-  VALUES (:RegCode,:UserCode, :UserName, :UserDesignation, :UserGroupID, :Password, :RefDate, :Remarks)";
+$insertQuery = "INSERT INTO tbUser (RegCode,UserCode, UserName, UserDesignation, UserGroupID, Password, RefDate, Remarks, LastPasswordUpdate)
+  VALUES (:RegCode,:UserCode, :UserName, :UserDesignation, :UserGroupID, :Password, :RefDate, :Remarks, :LastPasswordUpdate)";
 $stmt = $pdo->prepare($insertQuery);
 $stmt->bindParam(':RegCode', $RegCode);
 $stmt->bindParam(':UserCode', $UserCode);
@@ -27,6 +29,7 @@ $stmt->bindParam(':UserGroupID', $UserGroupID);
 $stmt->bindParam(':Password', $Password);
 $stmt->bindParam(':RefDate', $RefDate);
 $stmt->bindparam(':Remarks', $Remarks);
+$stmt->bindParam(':LastPasswordUpdate', $LastPasswordUpdate);
 
 $stmt->execute();
 
@@ -65,10 +68,13 @@ $stmt->execute();
         <input type="password" name="Password" required><br>
 
         <label for="RefDate">Reference Date:</label>
-        <input type="date" name="RefDate" required><br>
+        <input type="datetime-local" name="RefDate" required><br>
 
         <label for="Remarks">Remarks:</label>
         <textarea name="Remarks"></textarea><br>
+
+        <label for="LastPasswordUpdate">Last Password Update:</label>
+        <input type="datetime-local" name="LastPasswordUpdate" required><br>
 
 
 
