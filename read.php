@@ -22,6 +22,7 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <th>UserGroupID</th>
             <th>RefDate</th>
             <th>LastPasswordUpdate</th>
+            <th>isDeleted</th>
             <!-- Add similar headers for other columns -->
         </tr>
         <?php foreach ($users as $user): ?>
@@ -33,6 +34,7 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 <td><?= $user['UserGroupID'] ?></td>
                 <td><?= $user['RefDate'] ?></td>
                 <td><?= $user['LastPasswordUpdate'] ?></td>
+                <td><?= $user['isDeleted'] ?></td>
  
             </tr>
         <?php endforeach; ?>

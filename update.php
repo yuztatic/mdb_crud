@@ -3,29 +3,42 @@ include 'db.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Handle form submission and update data in the database
-    $stmt = $pdo->prepare("UPDATE tbUser SET UserCode=?, UserName=?, UserDesignation=?, UserGroupID=?, Password=?, RefDate=?, IsDeleted=?, DeletedDate=?, Remarks=?, LastPasswordUpdate=?, LastLogin=? WHERE RegCode=?");
+    $stmt = $pdo->prepare("UPDATE tbUser SET UserCode=?, UserName=?, UserDesignation=?, UserGroupID=?, Password=?, RefDate=?, Remarks=?, LastPasswordUpdate=?, LastLogin=? WHERE UserCode=?");
 
-    $stmt->execute([
-        $_POST['UserCode'],
-        $_POST['UserName'],
-        $_POST['UserDesignation'],
-        $_POST['UserGroupID'],
-        $_POST['Password'],
-        $_POST['RefDate'],
-        $_POST['IsDeleted'],
-        $_POST['DeletedDate'],
-        $_POST['Remarks'],
-        $_POST['LastPasswordUpdate'],
-        $_POST['LastLogin'],
-        $_POST['RegCode']
-    ]);
-
-    header('Location: read.php');
+    $UserCode = $_POST['UserCode'];
+    $UserName = $_POST['UserName'];
+    $UserDesignation = $_POST['UserDesignation'];
+    $UserGroupID = $_POST['UserGroupID'];
+    $Password = $_POST['Password'];
+    $RefDate = date('Y/m/d h:i:s A', strtotime($_POST['RefDate']));
+    // $IsDeleted = $_POST['isDeleted'];
+    // $DeletedDate = $_POST['DeletedDate'];
+    $Remarks = $_POST['Remarks'];
+    $LastPasswordUpdate =  date('Y/m/d h:i:s A', strtotime($_POST['LastPasswordUpdate']));
+    $LastLogin =  date('Y/m/d h:i:s A', strtotime($_POST['LastLogin']));
+    $RegCode = $_POST['UserCode'];
+    
+    $stmt->bindParam(1, $UserCode);
+    $stmt->bindParam(2, $UserName);
+    $stmt->bindParam(3, $UserDesignation);
+    $stmt->bindParam(4, $UserGroupID);
+    $stmt->bindParam(5, $Password);
+    $stmt->bindParam(6, $RefDate);
+    //$stmt->bindParam(7, $IsDeleted);
+    // $stmt->bindParam(7, $DeletedDate);
+    $stmt->bindParam(7, $Remarks);
+    $stmt->bindParam(8, $LastPasswordUpdate);
+    $stmt->bindParam(9, $LastLogin);
+    $stmt->bindParam(10, $RegCode);
+    
+    $stmt->execute();
+    
+   header('Location: read.php');
     exit;
-} elseif (isset($_GET['id'])) {
+} elseif (isset($_GET['UserCode'])) {
     // Fetch user data for the selected ID
-    $stmt = $pdo->prepare("SELECT * FROM tbUser WHERE RegCode = ?");
-    $stmt->execute([$_GET['id']]);
+    $stmt = $pdo->prepare("SELECT * FROM tbUser WHERE UserCode = ?");
+    $stmt->execute([$_GET['UserCode']]);
     $user = $stmt->fetch(PDO::FETCH_ASSOC);
 } else {
     // Redirect to the read page if no ID is provided
@@ -63,11 +76,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <input type="password" name="Password" value="<?= $user['Password'] ?>" required><br>
 
         <label for="RefDate">Reference Date:</label>
-        <input type="date" name="RefDate" value="<?= $user['RefDate'] ?>" required><br>
+        <input type="date" name="RefDate" value="<?=  date('Y-m-d', strtotime($user['RefDate'])); ?>" required><br>
 
         <label for="IsDeleted">Is Deleted:</label>
-        <input type="checkbox" name="IsDeleted" <?= $user['IsDeleted'] ? 'checked' : '' ?>><br>
+        <input type="checkbox" name="IsDeleted" <?= $user['isDeleted'] ? 'checked' : '' ?>>
 
+    
         <label for="DeletedDate">Deleted Date:</label>
         <input type="date" name="DeletedDate" value="<?= $user['DeletedDate'] ?>"><br>
 
